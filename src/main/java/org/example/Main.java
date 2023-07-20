@@ -7,13 +7,13 @@ import org.example.Exceptions.FutureDayException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Main {
 
     private static final String errorArguments = "Формат команды для утилиты: currency_rates --code=USD --date=2022-10-08";
 
     public static void main(String[] args) {
-        System.setProperty("console.encoding", "UTF-8");
 
         if (args.length != 2) {
             System.out.println(errorArguments);
@@ -29,7 +29,12 @@ public class Main {
             } else if (arg.startsWith("--date=")) {
                 String dateString = arg.substring(7);
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                targetDate = LocalDate.parse(dateString, formatter);
+                try {
+                    targetDate = LocalDate.parse(dateString, formatter);
+                } catch (DateTimeParseException dtpe) {
+                    System.out.println("Дата должна быть в формате YYYY-MM-DD");
+                }
+
             }
         }
 
